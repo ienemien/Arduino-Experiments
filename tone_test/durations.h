@@ -1,0 +1,4 @@
+#define WHOLE_NOTE 	1000
+#define HALF_NOTE	1000/2
+#define QUARTER_NOTE	1000/4
+#define EIGHTH_NOTE	1000/8
