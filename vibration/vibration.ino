@@ -19,16 +19,8 @@ void loop() {
   Serial.print(bpm);
   Serial.print("\n");
   Serial.print("========================");
+  inPeak = false;
   delay(5000);
-}
-
-bool isBeat(int value) 
-{
-  if(value > 500) 
-  {
-    return true;
-  }
-  return false;
 }
 
 int calculateBpm() 
@@ -36,24 +28,23 @@ int calculateBpm()
   int beats = 0;
   
     //run for 15 seconds and measure beats
-    for(int i = 0; i <= 150;i++)
+    for(int i = 0; i <= 150; i++)
     {
       int analogShake = analogRead(A_SHAKE);
   
-      if(isBeat(analogShake))
+      if(analogShake > 200)
       {
         if(!inPeak) {
             Serial.print("IS BEAT: ");
             Serial.print(analogShake);
             Serial.print("\n");
-            inPeak = true;
             beats++;
-          }
+            inPeak = true;
+        }
       } else {
-        inPeak = false;
-        Serial.print("no beat: ");
         Serial.print(analogShake);
         Serial.print("\n");
+        inPeak = false;
       }
       delay(100);
     }
