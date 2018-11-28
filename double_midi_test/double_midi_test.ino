@@ -1,5 +1,14 @@
 #include "volca_beats.h"
 
+#include <Ultrasonic.h>
+
+/*
+ * Pass as a parameter the trigger and echo pin, respectively,
+ * or only the signal pin (for sensors 3 pins), like:
+ * Ultrasonic ultrasonic(13);
+ */
+Ultrasonic ultrasonic(50, 51);
+
 void setup() {
   //beat
   Serial.begin(31250);
@@ -9,9 +18,10 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  int distanceCm = ultrasonic.read();
+  int note = map(distanceCm, 0, 127, 100, 20 );
   playDrum(KICK);
-  playBass(50);
+  playBass(note);
 }
 
 void playDrum(int drum) {
