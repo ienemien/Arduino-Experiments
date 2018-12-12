@@ -1,6 +1,7 @@
 #include "volca_beats.h"
 
 #include <Ultrasonic.h>
+#include <Wire.h>
 
 /*
  * Pass as a parameter the trigger and echo pin, respectively,
@@ -12,22 +13,22 @@ Ultrasonic ultrasonic(50, 51);
 int pitch = 100;
 
 void setup() {
+  // wire for communication with bpm slave
+  Wire.begin();        // join i2c bus (address optional for master)
+  
   //beat
   Serial.begin(31250);
 
   // bass
   Serial1.begin(31250);
-
-  //bpm in
-  Serial3.begin(9600);
 }
 
 void loop() {
-  int bpm = 60;
-  /**  check if data has been sent from the computer: */
-  while (Serial3.available()) {
-    /* read the most recent byte */
-    bpm = Serial3.read();
+  int bpm = 100;
+  Wire.requestFrom(8, 1);    // request one byte from device #8
+
+  while (Wire.available()) { // slave may send less than requested
+    bpm = Wire.read(); // read bpm from slave
   }
   playRhytm(bpm);
 }
