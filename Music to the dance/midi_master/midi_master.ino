@@ -14,22 +14,27 @@ int pitch = 100;
 
 void setup() {
   // wire for communication with bpm slave
-  Wire.begin();        // join i2c bus (address optional for master)
+  Wire.begin(); // join i2c bus (address optional for master)
   
   //beat
   Serial.begin(31250);
-
+  // Serial.begin(9600);
+  
   // bass
   Serial1.begin(31250);
 }
 
 void loop() {
   int bpm = 100;
-  Wire.requestFrom(8, 1);    // request one byte from device #8
-
-  while (Wire.available()) { // slave may send less than requested
-    bpm = Wire.read(); // read bpm from slave
+  Wire.requestFrom(8, 2);    // request 2 bytes from device #8
+  while (Wire.available()) {
+    byte a = Wire.read();
+    byte b = Wire.read();
+    bpm = a;
+    bpm = (bpm << 8) | b;
+    Serial.println(bpm);
   }
+  // delay(5000);
   playRhytm(bpm);
 }
 
@@ -75,7 +80,7 @@ void playRhytm(int bpm) {
 void getPitch() {
   int distanceCm = ultrasonic.read();
   pitch = map(distanceCm, 0, 127, 100, 20 );
-  }
+}
 
 void sendDrum(int cmd, int pitch, int velocity) {
   Serial.write(cmd);

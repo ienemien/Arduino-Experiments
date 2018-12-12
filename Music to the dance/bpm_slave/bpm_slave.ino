@@ -1,3 +1,7 @@
+// connect GND of UNO to GND of MEGA
+// connect A4 (SDA pin) of UNO to SDA pin 20 of MEGA
+// connect A5 of UNO to SCL pin 21 of MEGA
+
 #include <Wire.h>
 
 #define A_SHAKE A0
@@ -6,19 +10,24 @@ bool inPeak = false;
 int bpm = 100;
 
 void setup() {
+  Serial.begin(9600);
   Wire.begin(8);           // join i2c bus with address #8
   Wire.onRequest(sendBpm); // register event
-  Serial.begin(9600);
   pinMode(A_SHAKE, INPUT);
 }
 
 void loop() {
   calculateBpm();
+  Serial.println(bpm);
 }
 
 void sendBpm() {
-  Wire.write(bpm);
-  Serial.println("bpm requested");
+  Serial.println("send bpm");
+  // divide int over two bytes
+  byte intArray[2];
+  intArray[0] = (bpm >> 8) & 0xFF;
+  intArray[1] = bpm & 0xFF;
+  Wire.write(intArray, 2);
 }
 
 void calculateBpm() 
@@ -41,6 +50,6 @@ void calculateBpm()
       }
       delay(100);
     }
-    bpm = beats * 4;
-    Serial.println(bpm);
+    int newBpm = beats * 4;
+    bpm = newBpm > 50 ? newBpm : 50;
   }
