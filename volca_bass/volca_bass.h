@@ -1,0 +1,12 @@
+#define SLIDE_TIME    5
+#define EXPRESSION    11
+#define OCTAVE        40
+#define LFO_RATE      41
+#define LFO_INT       42
+#define VCO_PITCH_1   43
+#define VCO_PITCH_2   44
+#define VCO_PITCH_3   45
+#define EG_ATTACK     46
+#define EQ_DEC_REL    47
+#define CUTOFF_EG_INT 48
+#define GATE_TIME     49

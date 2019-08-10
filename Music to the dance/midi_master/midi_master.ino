@@ -18,7 +18,6 @@ void setup() {
   
   //beat
   Serial.begin(31250);
-  // Serial.begin(9600);
   
   // bass
   Serial1.begin(31250);
@@ -74,7 +73,7 @@ void playRhytm(int bpm) {
       delay(ms_per_beat);
       sendDrum(NOTE_OFF, CL_HAT, 127);
       sendBass(NOTE_OFF, pitch, 0);
-    }
+    } 
 }
 
 void getPitch() {
