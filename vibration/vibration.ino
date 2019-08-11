@@ -11,7 +11,7 @@ void setup() {
 
 void loop() {
   int bpm = calculateBpm();
-  Serial.println(bpm);
+  //Serial.println(bpm);
   inPeak = false;
 }
 
@@ -23,6 +23,7 @@ int calculateBpm()
     for(int i = 0; i <= 100; i++)
     {
       int analogShake = analogRead(A_SHAKE);
+      Serial.println(analogShake);
   
       if(analogShake > 200)
       {

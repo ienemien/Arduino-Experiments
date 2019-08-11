@@ -5,32 +5,36 @@
 MIDI_CREATE_INSTANCE(HardwareSerial, Serial, volcaBeats); // volca beats midi connector on TX0
 MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, volcaBass); // volca bass midi connector on TX1
 
+#define VIBRATION_PIN A0
+
+int bpm = 120;
+
 void setup() {
+  pinMode(VIBRATION_PIN, INPUT);
   volcaBeats.begin(MIDI_CHANNEL_OMNI);
   volcaBass.begin(MIDI_CHANNEL_OMNI);
   volcaBass.sendRealTime(midi::Start);
+  volcaBeats.sendRealTime(midi::Start);
 }
 
 void loop() {
+
   // bass is synced with beats through the sync cable
   // beats controls the tempo
-  volcaBeats.sendNoteOn(KICK, 100, 1);
-  delay(500);
-  volcaBeats.sendNoteOn(KICK, 100, 1);
-  quarterNotePassed();
-  delay(500);
-  volcaBeats.sendNoteOn(KICK, 100, 1);
-  quarterNotePassed();
-  delay(500);
-  volcaBeats.sendNoteOn(KICK, 100, 1);
-  quarterNotePassed();
-  delay(500);
-  volcaBeats.sendNoteOn(KICK, 100, 1);
-  quarterNotePassed();
+  int vibration = analogRead(VIBRATION_PIN);
+  if (vibration > 30) {
+    bpm = map(vibration, 30, 1020, 60, 200);
+  }
+
+  unsigned int msPerMinute = (unsigned int)1000 * 60;
+  unsigned int msPerBeat = msPerMinute / bpm;
+
+  playBar(msPerBeat);
 }
 
-void wholeNotePassed() {
+void playBar(int msPerBeat) {
   for (int i = 0; i < 4; i++) {
+    delay(msPerBeat);
     quarterNotePassed();
   }
 }
