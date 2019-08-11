@@ -7,7 +7,7 @@ MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, volcaBass); // volca bass midi con
 
 #define VIBRATION_PIN A0
 
-int bpm = 120;
+int bpm = 60;
 
 void setup() {
   pinMode(VIBRATION_PIN, INPUT);
@@ -23,7 +23,7 @@ void loop() {
   // beats controls the tempo
   int vibration = analogRead(VIBRATION_PIN);
   if (vibration > 30) {
-    bpm = map(vibration, 30, 1020, 60, 200);
+    bpm = map(vibration, 30, 1020, 60, 220);
   }
 
   unsigned int msPerMinute = (unsigned int)1000 * 60;
@@ -34,13 +34,14 @@ void loop() {
 
 void playBar(int msPerBeat) {
   for (int i = 0; i < 4; i++) {
-    delay(msPerBeat);
-    quarterNotePassed();
+    quarterNotePassed(msPerBeat);
   }
 }
 
-void quarterNotePassed() {
+void quarterNotePassed(int msPerBeat) {
+  int pulseDelay = msPerBeat / 24;
   for (int i = 0; i < 24; i++) {
     volcaBeats.sendRealTime(midi::Clock);
+    delay(pulseDelay);
   }
 }
