@@ -20,7 +20,8 @@
      //MIDI.sendControlChange(LFO_RATE, 30, 1);
      //MIDI.sendPitchBend(80, 1);
      MIDI.sendControlChange(EXPRESSION, 4, 1);
-     delay(3000);
+     delay(2000);
+     quarterNotePassed();
      MIDI.sendRealTime(midi::Clock);
      //MIDI.sendControlChange(OCTAVE, 60, 1);
      //MIDI.sendControlChange(VCO_PITCH_1, 80, 1);
@@ -29,7 +30,8 @@
      //MIDI.sendControlChange(LFO_RATE, 80, 1);
      //MIDI.sendControlChange(LFO_INT, 120, 1);
      MIDI.sendControlChange(EXPRESSION, 50, 1);
-     delay(3000);
+     delay(2000);
+     quarterNotePassed();
      MIDI.sendRealTime(midi::Clock);
      //MIDI.sendControlChange(OCTAVE, 127, 1);
      //MIDI.sendControlChange(VCO_PITCH_1, 120, 1);
@@ -37,7 +39,15 @@
      //MIDI.sendControlChange(GATE_TIME, 90, 1);
      //MIDI.sendControlChange(LFO_RATE, 100, 1);
      MIDI.sendControlChange(EXPRESSION, 111, 1);
-     delay(5000);
+     delay(2000);
+     quarterNotePassed();
+     delay(2000);
      MIDI.sendRealTime(midi::Stop);
      delay(3000);
  }
+
+  void quarterNotePassed() {
+    for(int i = 0; i < 24; i++) {
+      MIDI.sendRealTime(midi::Clock);
+      }
+  }
