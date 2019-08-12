@@ -18,27 +18,21 @@ void setup() {
 }
 
 void loop() {
+  int vibration = analogRead(VIBRATION_PIN);
+  int pitch1 = map(vibration, 0, 1023, 0, 255);
+  //volcaBass.sendControlChange(VCO_PITCH_1, pitch1, 1);
+  //volcaBass.sendControlChange(VCO_PITCH_2, pitch1, 1);
+  //volcaBass.sendControlChange(VCO_PITCH_3, pitch1, 1);
+  volcaBass.sendControlChange(LFO_RATE, pitch1, 1);
 
   // bass is synced with beats through the sync cable
   // beats controls the tempo
-  int vibration = analogRead(VIBRATION_PIN);
-  if (vibration > 30) {
-    bpm = map(vibration, 30, 1020, 60, 220);
-  }
+  quarterNotePassed();
+}
 
+void quarterNotePassed() {
   unsigned int msPerMinute = (unsigned int)1000 * 60;
   unsigned int msPerBeat = msPerMinute / bpm;
-
-  playBar(msPerBeat);
-}
-
-void playBar(int msPerBeat) {
-  for (int i = 0; i < 4; i++) {
-    quarterNotePassed(msPerBeat);
-  }
-}
-
-void quarterNotePassed(int msPerBeat) {
   int pulseDelay = msPerBeat / 24;
   for (int i = 0; i < 24; i++) {
     volcaBeats.sendRealTime(midi::Clock);
