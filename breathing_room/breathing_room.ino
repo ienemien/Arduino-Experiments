@@ -35,22 +35,33 @@ void setup() {
 }
 
 void loop() {
-  setBmpFromTemperature();
+  setBpmFromTemperature();
   volcaBass.sendControlChange(LFO_RATE, getRateFromVibration(), 1);
 
   volcaBass.sendControlChange(VCO_PITCH_1, getPitchFromDistance(), 1);
   volcaBass.sendControlChange(VCO_PITCH_2, getPitchFromDistance(), 1);
   volcaBass.sendControlChange(VCO_PITCH_3, getPitchFromDistance(), 1);
 
+  volcaBass.sendControlChange(EG_ATTACK, getAttackFromHumidity(), 1);
+
   // bass is synced with beats through the sync cable
   // beats controls the tempo
-  quarterNotePassed();
+  for (int i = 0; i < 4; i++) {
+    quarterNotePassed();
+  }
+
 }
 
-int setBmpFromTemperature() {
+int setBpmFromTemperature() {
   // Read temperature as Celsius (the default)
   float temperature = dht.readTemperature();
   bpm = map(temperature, 15, 30, 50, 160);
+}
+
+int getAttackFromHumidity() {
+  // Read temperature as Celsius (the default)
+  float humidity = dht.readHumidity();
+  return map(humidity, 30, 100, 100, 1000);
 }
 
 int getRateFromVibration() {
